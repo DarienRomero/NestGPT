@@ -4,6 +4,11 @@ import { OrthographyDto, ProsConsDiscusserDto } from './dtos';
 import OpenAI from 'openai';
 import { prosConsDicusserUseCase } from './use-cases/pros-cons-discusser.use-case';
 import { prosConsDicusserStreamUseCase } from './use-cases/pros-cons-stream.use-case';
+import { TranslateDto } from './dtos/translate.dto';
+import { translateUseCase } from './use-cases/translate.use-case';
+import { TextToAudioDto } from './dtos/text-to-audio.dto';
+import { textToAudioUseCase } from './use-cases/text-to-audio.use-case';
+import { getAudioUseCase } from './use-cases/get-audio.use-case';
 
 @Injectable()
 export class GptService {
@@ -23,9 +28,27 @@ export class GptService {
             prompt: prosConsDiscusserDto.prompt
         });
     }
+
     async prosConsDicusserStream(prosConsDiscusserDto: ProsConsDiscusserDto){
         return await prosConsDicusserStreamUseCase(this.openai, {
             prompt: prosConsDiscusserDto.prompt
         });
+    }
+
+    async translate(translateDto: TranslateDto){
+        return await translateUseCase(this.openai, {
+            prompt: translateDto.prompt,
+            lang: translateDto.lang
+        });
+    }
+
+    async textToAudio({prompt, voice}: TextToAudioDto){
+        return await textToAudioUseCase(this.openai, {
+            prompt: prompt,
+            voice: voice
+        });
+    }
+    async getAudio(fileId: string){
+        return getAudioUseCase(fileId);
     }
 }
