@@ -1,6 +1,6 @@
 import { Body, Controller, FileTypeValidator, Get, HttpStatus, MaxFileSizeValidator, Param, ParseFilePipe, Post, Res, UploadedFile, UseInterceptors } from '@nestjs/common';
 import { GptService } from './gpt.service';
-import { OrthographyDto } from './dtos';
+import { AudioToTextDto, OrthographyDto } from './dtos';
 import { ProsConsDiscusserDto } from './dtos/prosConsDiscusser.dto';
 import type { Response } from 'express';
 import { TranslateDto } from './dtos/translate.dto';
@@ -98,9 +98,9 @@ export class GptController {
           new FileTypeValidator({fileType:'audio/*'})
         ]
       })
-    ) file: Express.Multer.File
+    ) file: Express.Multer.File,
+    @Body('prompt') audioToTextDto: AudioToTextDto
   ) {
-    console.log({file})
-    return 'done';
+    return this.gptService.audioToText(file, audioToTextDto.prompt);
   }
 }

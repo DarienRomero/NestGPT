@@ -9,6 +9,7 @@ import { translateUseCase } from './use-cases/translate.use-case';
 import { TextToAudioDto } from './dtos/text-to-audio.dto';
 import { textToAudioUseCase } from './use-cases/text-to-audio.use-case';
 import { getAudioUseCase } from './use-cases/get-audio.use-case';
+import { audioToTextUseCase } from './use-cases/audio-to-text.use-case';
 
 @Injectable()
 export class GptService {
@@ -50,5 +51,9 @@ export class GptService {
     }
     async getAudio(fileId: string){
         return getAudioUseCase(fileId);
+    }
+
+    async audioToText(audioFile: Express.Multer.File, prompt?: string){
+        return await audioToTextUseCase(this.openai, {audioFile, prompt})
     }
 }
