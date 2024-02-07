@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { orthographyCheckUseCase } from './use-cases';
-import { OrthographyDto, ProsConsDiscusserDto } from './dtos';
+import { getImageUseCase, imageGenerationUseCase, orthographyCheckUseCase } from './use-cases';
+import { ImageGenerationDto, OrthographyDto, ProsConsDiscusserDto } from './dtos';
 import OpenAI from 'openai';
 import { prosConsDicusserUseCase } from './use-cases/pros-cons-discusser.use-case';
 import { prosConsDicusserStreamUseCase } from './use-cases/pros-cons-stream.use-case';
@@ -55,5 +55,11 @@ export class GptService {
 
     async audioToText(audioFile: Express.Multer.File, prompt?: string){
         return await audioToTextUseCase(this.openai, {audioFile, prompt})
+    }
+    async imageGeneration(imageGenerationDto: ImageGenerationDto){
+        return imageGenerationUseCase(this.openai, {...imageGenerationDto})
+    }
+    async getImage(fileId: string){
+        return getImageUseCase(fileId);
     }
 }
